@@ -1,0 +1,57 @@
+plugins {
+    id 'org.springframework.boot' version '2.7.0'
+    id 'io.spring.dependency-management' version '1.0.11.RELEASE'
+    id 'java'
+//    id 'org.springframework.experimental.aot' version '0.12.0'
+}
+
+group = 'com.scsol'
+version = '0.0.1-SNAPSHOT'
+sourceCompatibility = '17'
+
+configurations {
+    compileOnly {
+        extendsFrom annotationProcessor
+    }
+}
+
+repositories {
+    maven { url 'https://repo.spring.io/release' }
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'org.springframework.boot:spring-boot-starter'
+
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+    implementation 'org.apache.commons:commons-lang3:3.12.0'
+
+    implementation group: 'io.netty', name: 'netty-all', version: '4.1.42.Final'
+    // 2022-06-01
+    compileOnly 'org.projectlombok:lombok'
+    developmentOnly 'org.springframework.boot:spring-boot-devtools'
+    annotationProcessor 'org.projectlombok:lombok'
+    // 2022-06-02
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    // 2022-06-03
+    implementation 'mysql:mysql-connector-java'
+
+    implementation group: 'commons-codec', name: 'commons-codec', version: '1.15'
+    //2022-08-18
+    implementation group: 'org.springframework.boot', name: 'spring-boot-starter-data-jdbc', version: '2.6.6'
+
+    // https://mvnrepository.com/artifact/org.assertj/assertj-core  2022-09-22, unsigned 처리 위한 라이브러리
+    testImplementation group: 'org.assertj', name: 'assertj-core', version: '3.22.0'
+
+
+
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+tasks.named('bootBuildImage') {
+    builder = 'paketobuildpacks/builder:tiny'
+    environment = ['BP_NATIVE_IMAGE': 'true']
+}
